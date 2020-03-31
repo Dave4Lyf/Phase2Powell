@@ -119,7 +119,7 @@ void writeArticle(int sock, FILE *logfile, char *action)
      char* path = (char*)calloc(1024, sizeof(char));
 
     strcpy(path, ARTICLEPATH); //copy the location of the article on the disk
-    strncat(path, &action[1], sizeof(path));
+    strncat(sizeof(*path), &action[1], sizeof(path));
 
     logData(logfile, "user writing article: %s", path); //writes to log file
 
@@ -128,6 +128,7 @@ void writeArticle(int sock, FILE *logfile, char *action)
     if (!file) //if not file is located dont write socket
     {
         writeSock(sock, FILENOTAVAIL, sizeof(FILENOTAVAIL)); //write a socket that will show not available
+        free(buf);
         return;
     }
 
@@ -136,7 +137,7 @@ void writeArticle(int sock, FILE *logfile, char *action)
 
     while (1) //always true so will go into the loop
     {
-        memset(buf, 0, sizeof(buf)); //allocating memory, start at buf and at size of buf -1
+        memset(sizeof(*buf), 0, sizeof(buf)); //allocating memory, start at buf and at size of buf -1
         x = readSock(sock, buf, sizeof(buf)-1); //x is size_t
         for (y = 0; y < x; ++y)
         {
@@ -187,7 +188,7 @@ void readArticle(int sock, FILE *logfile, char *action)
     /* fgets for the size of the buffer (100), from the file
        writing the article to the user each time! */
 
-    while (fgets(buf, 1000, file))
+    while (fgets(buf, 100, file))
     {
         writeSock(sock, buf, strlen(buf));
     }
@@ -505,7 +506,7 @@ void mainLoop(FILE *logf, int sock)
     socklen_t clientlen = 0;
     pid_t offspring = 0;
 
-    memset(client, 0, sizeof(client));//*client or client?
+    memset(sizeof(*client), 0, sizeof(client));//*client or client?
 
     logData(logf, "entering main loop...");
 
