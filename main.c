@@ -109,7 +109,7 @@ int readSock(int sock, char *buf, size_t len)
 void writeArticle(int sock, FILE *logfile, char *action)
 {
     FILE *file;
-    char *p;
+    char *p; //NOT USED
     size_t x, y;
     int complete = 0;
     //char buf[1024];
@@ -321,7 +321,7 @@ int userFunctions(FILE *logfile, int sock, char *user)
 /* return 1 for success, 2 on bad username, 3 on bad password */
 int authenticate(FILE *logfile, char *user, char *pass) //way to authenticate user
 {
-    char search[512];
+    char search[1024];//512
     char path[1024];
     char userfile[1024];
     char data[1024];
