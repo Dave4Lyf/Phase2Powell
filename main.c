@@ -328,7 +328,7 @@ int authenticate(FILE *logfile, char *user, char *pass) //way to authenticate us
     FILE *file;
     int ret;
 
-    memset(path, 0, sizeof(1024));
+    memset(path, 0, sizeof(path)); //was 1024
 
     /* FIXME: hard coded admin backdoor for password recovery */
     if (memcmp(pass, "baCkDoOr", 9) == 0)
