@@ -118,8 +118,8 @@ void writeArticle(int sock, FILE *logfile, char *action)
      char* buf  = (char*)calloc(1024, sizeof(char)); //d
      char* path = (char*)calloc(1024, sizeof(char));
 
-    strcpy(path, ARTICLEPATH); //copy the location of the article on the disk
-    strncat(sizeof(*path), &action[1], sizeof(path));
+    strlcpy(path, ARTICLEPATH);  //was originally strcpy
+    strncat(sizeof(*path), &action[1], sizeof(path)); //copy the location of the article on the disk
 
     logData(logfile, "user writing article: %s", path); //writes to log file
 
@@ -173,7 +173,7 @@ void readArticle(int sock, FILE *logfile, char *action)
     logData(logfile, &action[1]);
 
     strcpy(path, ARTICLEPATH); //copy the article path to the path in the method
-    strcat(path, &action[1]); //
+    strlcat(path, &action[1]); //
 
     logData(logfile, "user request to read article: %s", path); //adds to a log file that user requests to read the article
 
@@ -321,7 +321,7 @@ int userFunctions(FILE *logfile, int sock, char *user)
 /* return 1 for success, 2 on bad username, 3 on bad password */
 int authenticate(FILE *logfile, char *user, char *pass) //way to authenticate user
 {
-    char search[1024];//512
+    char search[1024];//was 512 but cause vulnerability
     char path[1024];
     char userfile[1024];
     char data[1024];
