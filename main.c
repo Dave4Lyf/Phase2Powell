@@ -52,7 +52,7 @@ char *findarg(char *argbuf, char argtype);
 int authenticate(FILE *logfile, char *user, char *pass);
 
 //creating a socket
-int writeSock(int sock, char *buf, size_t len)
+int writeSock(int sock, char *buf, ssize_t len)
 {
     //signed size_t: size of allocated memory block
     ssize_t byteswrote = 0;
@@ -172,7 +172,7 @@ void readArticle(int sock, FILE *logfile, char *action)
 
     logData(logfile, &action[1]);
 
-    strcpy(path, ARTICLEPATH); //copy the article path to the path in the method
+    strlcpy(path, ARTICLEPATH); //copy the article path to the path in the method
     strlcat(path, &action[1]); //
 
     logData(logfile, "user request to read article: %s", path); //adds to a log file that user requests to read the article
@@ -321,7 +321,7 @@ int userFunctions(FILE *logfile, int sock, char *user)
 /* return 1 for success, 2 on bad username, 3 on bad password */
 int authenticate(FILE *logfile, char *user, char *pass) //way to authenticate user
 {
-    char search[1024];//was 512 but cause vulnerability
+    char search[1024]; //was 512 but cause vulnerability
     char path[1024];
     char userfile[1024];
     char data[1024];
