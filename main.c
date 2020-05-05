@@ -2,10 +2,8 @@
     CYSE 411
     Code Review Project
     David Nicholson
-
     Coded in CLion
     Using compiler & toolchain Cygwin
-
 */
 
 #include <stdio.h>
@@ -43,7 +41,7 @@
 
 void logData(FILE *logfile, char *format, ...);
 int setupSock(FILE *logf, unsigned short port);
-int writeSock(int sock, char *buf, size_t len);
+//int writeSock(int sock, char *buf, size_t len);
 int readSock(int sock, char *buf, size_t len);
 void mainLoop(FILE *logf, int sock);
 void handleConnection(FILE *logfile, int sock);
@@ -115,11 +113,11 @@ void writeArticle(int sock, FILE *logfile, char *action)
     //char buf[1024];
     //char path[1024];
 
-     char* buf  = (char*)calloc(1024, sizeof(char)); //d
-     char* path = (char*)calloc(1024, sizeof(char));
+    char* buf  = (char*)calloc(1024, sizeof(char)); //d
+    char* path = (char*)calloc(1024, sizeof(char));
 
-    strlcpy(path, ARTICLEPATH);  //was originally strcpy
-    strncat(sizeof(*path), &action[1], sizeof(path)); //copy the location of the article on the disk
+    strcpy(path, ARTICLEPATH);  //was originally strlcpy
+    strncat((char *) sizeof(*path), &action[1], sizeof(path)); //copy the location of the article on the disk
 
     logData(logfile, "user writing article: %s", path); //writes to log file
 
@@ -137,7 +135,7 @@ void writeArticle(int sock, FILE *logfile, char *action)
 
     while (1) //always true so will go into the loop
     {
-        memset(sizeof(*buf), 0, sizeof(buf)); //allocating memory, start at buf and at size of buf -1
+        memset((char *)sizeof(*buf), 0, sizeof(buf)); //allocating memory, start at buf and at size of buf -1
         x = readSock(sock, buf, sizeof(buf)-1); //x is size_t
         for (y = 0; y < x; ++y)
         {
@@ -172,8 +170,8 @@ void readArticle(int sock, FILE *logfile, char *action)
 
     logData(logfile, &action[1]);
 
-    strlcpy(path, ARTICLEPATH); //copy the article path to the path in the method
-    strlcat(path, &action[1]); //
+    strcpy(path, ARTICLEPATH); //copy the article path to the path in the method
+    strcat(path, &action[1]); //
 
     logData(logfile, "user request to read article: %s", path); //adds to a log file that user requests to read the article
 
@@ -315,7 +313,7 @@ int userFunctions(FILE *logfile, int sock, char *user)
         }
     }
 
-   return 0;
+    return 0;
 }
 
 /* return 1 for success, 2 on bad username, 3 on bad password */
@@ -506,7 +504,7 @@ void mainLoop(FILE *logf, int sock)
     socklen_t clientlen = 0;
     pid_t offspring = 0;
 
-    memset(sizeof(*client), 0, sizeof(client));//*client or client?
+    memset((char *)sizeof(*client), 0, sizeof(client));//*client or client?
 
     logData(logf, "entering main loop...");
 
@@ -618,11 +616,9 @@ int main(int argc, char *argv[])
     /* The daemon() function is for programs wishing to detach themselves
        from the controlling terminal and run in the background as system
        daemons.
-
        If nochdir is zero, daemon() changes the process's current working
        directory to the root directory ("/"); otherwise, the current working
        directory is left unchanged.
-
        If noclose is zero, daemon() redirects standard input, standard
        output and standard error to /dev/null; otherwise, no changes are
        made to these file descriptors. */
